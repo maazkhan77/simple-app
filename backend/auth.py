@@ -16,6 +16,7 @@ GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
 GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
 BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:8000")
+COOKIE_SECURE = BACKEND_URL.startswith("https")
 
 COOKIE_NAME = "session"
 JWT_ALGO = "HS256"
@@ -37,8 +38,8 @@ def set_session_cookie(resp: Response, token: str):
         COOKIE_NAME,
         token,
         httponly=True,
-        samesite="lax",
-        secure=False,
+        samesite="none" if COOKIE_SECURE else "lax",
+        secure=COOKIE_SECURE,
         max_age=COOKIE_MAX_AGE,
         path="/",
     )
