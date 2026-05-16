@@ -85,7 +85,10 @@ def github_login():
 
 
 @router.get("/auth/github/callback")
-def github_callback(code: str, user=Depends(get_current_user_optional)):
+def github_callback(code: str | None = None, error: str | None = None, user=Depends(get_current_user_optional)):
+    if error or not code:
+        return RedirectResponse(f"{FRONTEND_URL}/?error=access_denied")
+
     token_resp = requests.post(
         "https://github.com/login/oauth/access_token",
         data={
@@ -197,7 +200,10 @@ def google_login():
 
 
 @router.get("/auth/google/callback")
-def google_callback(code: str):
+def google_callback(code: str | None = None, error: str | None = None):
+    if error or not code:
+        return RedirectResponse(f"{FRONTEND_URL}/?error=access_denied")
+
     token_resp = requests.post(
         "https://oauth2.googleapis.com/token",
         data={
