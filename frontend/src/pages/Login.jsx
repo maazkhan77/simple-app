@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Github } from 'lucide-react'
-
-const API = 'http://localhost:8000'
+import { API } from '../context/AuthContext'
 
 export default function Login() {
   const [params, setParams] = useSearchParams()
